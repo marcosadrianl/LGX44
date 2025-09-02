@@ -63,14 +63,14 @@ export default function Home() {
 
   return (
     <main className="relative p-8 text-black h-screen w-screen min-w-[1200px]">
-      <Image
+      {/* <Image
         src="/R.jpg" // o una URL externa
         alt="Fondo"
         fill // ← esto hace que ocupe todo el contenedor
         className="object-cover -z-10"
         priority
-      />
-      <h1 className="text-3xl text-black font-bold mb-8 text-left">
+      /> */}
+      <h1 className="text-3xl text-white font-bold mb-8 text-left">
         Control de Pedidos - LGX 44
       </h1>
 
