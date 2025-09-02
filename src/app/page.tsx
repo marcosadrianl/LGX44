@@ -3,8 +3,9 @@
 import { usePedidos } from "@/app/hooks/usePedidos";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { formatDate, formatToISO } from "@/app/lib/dateFormat";
+import { formatDate, formatToISO, todayLocalISO } from "@/app/lib/dateFormat";
 import { sumKilos } from "@/app/lib/sumKilos";
+import Image from "next/image";
 
 export default function Home() {
   const { pedidos, addPedido, updatePedido, deletePedido, clearPedidos } =
@@ -44,9 +45,10 @@ export default function Home() {
 
   const handleSaveEdit = (id: string) => {
     if (!pedidoEdit) return;
+    console.log(pedidoEdit.fecha);
 
     updatePedido(id, {
-      fecha: pedidoEdit.fecha,
+      fecha: formatDate(pedidoEdit.fecha),
       numero: pedidoEdit.numero,
       peso: Number(pedidoEdit.peso),
       autorizado: pedidoEdit.autorizado,
@@ -57,23 +59,22 @@ export default function Home() {
     setPedidoEdit(null);
   };
 
-  function todayLocalISO(): string {
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, "0");
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const year = now.getFullYear();
-    return `${year}-${month}-${day}`;
-  }
-  console.log(pedidos);
   const totalKilos = sumKilos(pedidos);
 
   return (
-    <main className="p-8 text-black h-screen w-screen min-w-[1200px]">
-      <h1 className="text-3xl text-white font-bold mb-8 text-left">
+    <main className="relative p-8 text-black h-screen w-screen min-w-[1200px]">
+      <Image
+        src="/R.jpg" // o una URL externa
+        alt="Fondo"
+        fill // ← esto hace que ocupe todo el contenedor
+        className="object-cover -z-10"
+        priority
+      />
+      <h1 className="text-3xl text-black font-bold mb-8 text-left">
         Control de Pedidos - LGX 44
       </h1>
 
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-2 gap-8 ">
         {/* 📌 Formulario */}
         <div className="border rounded-lg p-6 shadow-md bg-white h-fit">
           <h2 className="text-xl font-semibold mb-4">Nuevo Pedido</h2>
@@ -181,9 +182,7 @@ export default function Home() {
                     <div className="space-y-3">
                       <input
                         type="date"
-                        value={
-                          pedidoEdit?.fecha ? formatToISO(pedidoEdit.fecha) : ""
-                        }
+                        value={pedidoEdit?.fecha ? pedidoEdit.fecha : ""}
                         onChange={(e) =>
                           setPedidoEdit({
                             ...pedidoEdit!,
@@ -262,7 +261,7 @@ export default function Home() {
                     </div>
                   ) : (
                     // 📌 Vista normal
-                    <div className="flex justify-between">
+                    <div className="flex justify-between ">
                       <div>
                         <p className="font-semibold">
                           {pedido.fecha} | Nº {pedido.numero} | {pedido.peso} kg

@@ -25,6 +25,19 @@ export function formatDate(dateString?: string): string {
 }
 
 export function formatToISO(fecha: string): string {
+  /* if (!fecha || typeof fecha !== "string") return ""; */
+
   const [dia, mes, anio] = fecha.split("/");
+
+  if (!dia || !mes || !anio) return "";
+
   return `${anio}-${mes.padStart(2, "0")}-${dia.padStart(2, "0")}`;
+}
+
+export function todayLocalISO(): string {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const year = now.getFullYear();
+  return `${year}-${month}-${day}`;
 }
