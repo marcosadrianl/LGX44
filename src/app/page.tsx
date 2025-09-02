@@ -27,7 +27,7 @@ export default function Home() {
 
     addPedido({
       id: uuidv4(),
-      fecha: formatDate(nuevoPedido.fecha),
+      fecha: nuevoPedido.fecha,
       numero: nuevoPedido.numero,
       peso: Number(nuevoPedido.peso),
       autorizado: nuevoPedido.autorizado,
@@ -48,7 +48,7 @@ export default function Home() {
     console.log(pedidoEdit.fecha);
 
     updatePedido(id, {
-      fecha: formatDate(pedidoEdit.fecha),
+      fecha: pedidoEdit.fecha,
       numero: pedidoEdit.numero,
       peso: Number(pedidoEdit.peso),
       autorizado: pedidoEdit.autorizado,
@@ -60,6 +60,8 @@ export default function Home() {
   };
 
   const totalKilos = sumKilos(pedidos);
+
+  console.log(pedidos);
 
   return (
     <main className="relative p-8 text-black h-screen w-screen min-w-[1200px]">
@@ -83,7 +85,11 @@ export default function Home() {
               <label className="w-28 font-medium">Fecha</label>
               <input
                 type="date"
-                value={nuevoPedido.fecha ? nuevoPedido.fecha : todayLocalISO()}
+                value={
+                  nuevoPedido.fecha
+                    ? nuevoPedido.fecha
+                    : new Date().toISOString().split("T")[0]
+                }
                 onChange={(e) =>
                   setNuevoPedido({ ...nuevoPedido, fecha: e.target.value })
                 }
@@ -182,7 +188,7 @@ export default function Home() {
                     <div className="space-y-3">
                       <input
                         type="date"
-                        value={pedidoEdit?.fecha ? pedidoEdit.fecha : ""}
+                        value={pedidoEdit?.fecha}
                         onChange={(e) =>
                           setPedidoEdit({
                             ...pedidoEdit!,
@@ -264,7 +270,8 @@ export default function Home() {
                     <div className="flex justify-between ">
                       <div>
                         <p className="font-semibold">
-                          {pedido.fecha} | Nº {pedido.numero} | {pedido.peso} kg
+                          {formatDate(pedido.fecha)} | Nº {pedido.numero} |{" "}
+                          {pedido.peso} kg
                         </p>
                         <p>
                           Autorizado:{" "}
