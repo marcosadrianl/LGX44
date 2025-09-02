@@ -1,4 +1,3 @@
-```markdown
 # LGX 44
 
 Repositorio libre para el control de **pesos y pedidos**.
@@ -46,5 +45,3 @@ LGX 44 guarda los datos de pedidos y pesos directamente en el navegador usando `
 Ideal para pruebas rápidas, prototipos o entornos sin backend.
 
 ---
-
-¿Querés que le agregue una sección de contribuciones o licencia también?
