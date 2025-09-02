@@ -1,103 +1,323 @@
-import Image from "next/image";
+"use client";
+
+import { usePedidos } from "@/app/hooks/usePedidos";
+import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { formatDate, formatToISO } from "@/app/lib/dateFormat";
+import { sumKilos } from "@/app/lib/sumKilos";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { pedidos, addPedido, updatePedido, deletePedido, clearPedidos } =
+    usePedidos();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const [nuevoPedido, setNuevoPedido] = useState({
+    fecha: "",
+    numero: "",
+    peso: "",
+    autorizado: false,
+    entregado: false,
+  });
+
+  const [editandoId, setEditandoId] = useState<string | null>(null);
+  const [pedidoEdit, setPedidoEdit] = useState<typeof nuevoPedido | null>(null);
+
+  const handleAdd = () => {
+    if (!nuevoPedido.numero || !nuevoPedido.peso) return;
+
+    addPedido({
+      id: uuidv4(),
+      fecha: formatDate(nuevoPedido.fecha),
+      numero: nuevoPedido.numero,
+      peso: Number(nuevoPedido.peso),
+      autorizado: nuevoPedido.autorizado,
+      entregado: nuevoPedido.entregado,
+    });
+
+    setNuevoPedido({
+      fecha: "",
+      numero: "",
+      peso: "",
+      autorizado: false,
+      entregado: false,
+    });
+  };
+
+  const handleSaveEdit = (id: string) => {
+    if (!pedidoEdit) return;
+
+    updatePedido(id, {
+      fecha: pedidoEdit.fecha,
+      numero: pedidoEdit.numero,
+      peso: Number(pedidoEdit.peso),
+      autorizado: pedidoEdit.autorizado,
+      entregado: pedidoEdit.entregado,
+    });
+
+    setEditandoId(null);
+    setPedidoEdit(null);
+  };
+
+  function todayLocalISO(): string {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = now.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
+  console.log(pedidos);
+  const totalKilos = sumKilos(pedidos);
+
+  return (
+    <main className="p-8 text-black h-screen w-screen min-w-[1200px]">
+      <h1 className="text-3xl text-white font-bold mb-8 text-left">
+        Control de Pedidos - LGX 44
+      </h1>
+
+      <div className="grid grid-cols-2 gap-8">
+        {/* 📌 Formulario */}
+        <div className="border rounded-lg p-6 shadow-md bg-white h-fit">
+          <h2 className="text-xl font-semibold mb-4">Nuevo Pedido</h2>
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <label className="w-28 font-medium">Fecha</label>
+              <input
+                type="date"
+                value={nuevoPedido.fecha ? nuevoPedido.fecha : todayLocalISO()}
+                onChange={(e) =>
+                  setNuevoPedido({ ...nuevoPedido, fecha: e.target.value })
+                }
+                className="border rounded p-2 flex-1"
+              />
+            </div>
+            <div className="flex items-center gap-4">
+              <label className="w-28 font-medium">N° Pedido</label>
+              <input
+                type="text"
+                placeholder="Ej: 1023"
+                value={nuevoPedido.numero}
+                onChange={(e) =>
+                  setNuevoPedido({ ...nuevoPedido, numero: e.target.value })
+                }
+                className="border rounded p-2 flex-1"
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="w-28 font-medium">Peso</label>
+              <input
+                type="number"
+                placeholder="kg"
+                value={nuevoPedido.peso}
+                onChange={(e) =>
+                  setNuevoPedido({ ...nuevoPedido, peso: e.target.value })
+                }
+                className="border rounded p-2 flex-1"
+              />
+            </div>
+
+            <div className="flex gap-6 mt-4">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={nuevoPedido.autorizado}
+                  onChange={(e) =>
+                    setNuevoPedido({
+                      ...nuevoPedido,
+                      autorizado: e.target.checked,
+                    })
+                  }
+                />
+                Autorizado
+              </label>
+
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={nuevoPedido.entregado}
+                  onChange={(e) =>
+                    setNuevoPedido({
+                      ...nuevoPedido,
+                      entregado: e.target.checked,
+                    })
+                  }
+                />
+                Entregado
+              </label>
+            </div>
+
+            <button
+              onClick={handleAdd}
+              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+            >
+              Agregar Pedido
+            </button>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        {/* 📌 Listado con overflow y auto*/}
+        <div className="border rounded-lg p-6 shadow-md bg-white">
+          <div className="flex justify-between items-center mb-4 gap-4">
+            <h2 className="text-xl font-semibold mb-1">Listado de Pedidos</h2>
+            <button
+              onClick={clearPedidos}
+              className="text-red-600 hover:text-red-800 transition"
+            >
+              Limpiar todos los pedidos
+            </button>
+          </div>
+          <h3 className="text-gray-500 mb-4">Total {totalKilos}kg</h3>
+          <hr />
+          {pedidos.length === 0 ? (
+            <p className="text-gray-500">No hay pedidos registrados.</p>
+          ) : (
+            <ul className="space-y-3 mt-1">
+              {pedidos.map((pedido) => (
+                <li
+                  key={pedido.id}
+                  className="border rounded p-4 hover:shadow-sm transition"
+                >
+                  {editandoId === pedido.id ? (
+                    // 📌 Formulario de edición
+                    <div className="space-y-3">
+                      <input
+                        type="date"
+                        value={
+                          pedidoEdit?.fecha ? formatToISO(pedidoEdit.fecha) : ""
+                        }
+                        onChange={(e) =>
+                          setPedidoEdit({
+                            ...pedidoEdit!,
+                            fecha: e.target.value,
+                          })
+                        }
+                        className="border rounded p-2 w-full"
+                      />
+                      <input
+                        type="text"
+                        value={pedidoEdit?.numero || ""}
+                        onChange={(e) =>
+                          setPedidoEdit({
+                            ...pedidoEdit!,
+                            numero: e.target.value,
+                          })
+                        }
+                        className="border rounded p-2 w-full"
+                      />
+                      <input
+                        type="number"
+                        value={pedidoEdit?.peso || ""}
+                        onChange={(e) =>
+                          setPedidoEdit({
+                            ...pedidoEdit!,
+                            peso: e.target.value,
+                          })
+                        }
+                        className="border rounded p-2 w-full"
+                      />
+                      <div className="flex gap-6">
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={pedidoEdit?.autorizado || false}
+                            onChange={(e) =>
+                              setPedidoEdit({
+                                ...pedidoEdit!,
+                                autorizado: e.target.checked,
+                              })
+                            }
+                          />
+                          Autorizado
+                        </label>
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={pedidoEdit?.entregado || false}
+                            onChange={(e) =>
+                              setPedidoEdit({
+                                ...pedidoEdit!,
+                                entregado: e.target.checked,
+                              })
+                            }
+                          />
+                          Entregado
+                        </label>
+                      </div>
+                      <div className="flex gap-4">
+                        <button
+                          onClick={() => handleSaveEdit(pedido.id)}
+                          className="flex-1 bg-green-600 text-white py-1 rounded hover:bg-green-700"
+                        >
+                          Guardar
+                        </button>
+                        <button
+                          onClick={() => {
+                            setEditandoId(null);
+                            setPedidoEdit(null);
+                          }}
+                          className="flex-1 bg-gray-400 text-white py-1 rounded hover:bg-gray-500"
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    // 📌 Vista normal
+                    <div className="flex justify-between">
+                      <div>
+                        <p className="font-semibold">
+                          {pedido.fecha} | Nº {pedido.numero} | {pedido.peso} kg
+                        </p>
+                        <p>
+                          Autorizado:{" "}
+                          <span
+                            className={
+                              pedido.autorizado
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }
+                          >
+                            {pedido.autorizado ? "Sí" : "No"}
+                          </span>{" "}
+                          | Entregado:{" "}
+                          <span
+                            className={
+                              pedido.entregado
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }
+                          >
+                            {pedido.entregado ? "Sí" : "No"}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => {
+                            setEditandoId(pedido.id);
+                            setPedidoEdit({
+                              ...pedido,
+                              peso: String(pedido.peso),
+                            });
+                          }}
+                          className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => deletePedido(pedido.id)}
+                          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </main>
   );
 }

@@ -3,25 +3,40 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev",
+    "build": "next build && next export",
     "start": "next start",
-    "lint": "eslint"
+    "electron-dev": "concurrently \"npm:dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-build": "npm run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.controlpesos.pedidos",
+    "win": {
+      "target": "nsis"
+    },
+    "directories": {
+      "output": "dist"
+    }
   },
   "dependencies": {
+    "next": "15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.5.2"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
+    "concurrently": "^9.2.1",
+    "electron": "^37.4.0",
+    "electron-builder": "^26.0.12",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "wait-on": "^8.0.4"
   }
 }
