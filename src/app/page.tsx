@@ -3,9 +3,8 @@
 import { usePedidos } from "@/app/hooks/usePedidos";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { formatDate, formatToISO, todayLocalISO } from "@/app/lib/dateFormat";
+import { formatDate } from "@/app/lib/dateFormat";
 import { sumKilos } from "@/app/lib/sumKilos";
-import Image from "next/image";
 
 export default function Home() {
   const { pedidos, addPedido, updatePedido, deletePedido, clearPedidos } =
