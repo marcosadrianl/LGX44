@@ -29,7 +29,7 @@ export default function Home() {
     addPedido({
       id: uuidv4(),
       fecha: nuevoPedido.fecha,
-      numero: Number(nuevoPedido.numero),
+      numero: nuevoPedido.numero,
       peso: Number(nuevoPedido.peso),
       autorizado: Boolean(nuevoPedido.autorizado),
       entregado: Boolean(nuevoPedido.entregado),
@@ -52,7 +52,7 @@ export default function Home() {
 
     updatePedido(id, {
       fecha: pedidoEdit.fecha,
-      numero: Number(pedidoEdit.numero),
+      numero: pedidoEdit.numero,
       peso: Number(pedidoEdit.peso),
       autorizado: pedidoEdit.autorizado,
       entregado: pedidoEdit.entregado,
