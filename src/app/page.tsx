@@ -17,6 +17,7 @@ export default function Home() {
     peso: "",
     autorizado: false,
     entregado: false,
+    notes: "",
   });
 
   const [editandoId, setEditandoId] = useState<string | null>(null);
@@ -28,10 +29,11 @@ export default function Home() {
     addPedido({
       id: uuidv4(),
       fecha: nuevoPedido.fecha,
-      numero: nuevoPedido.numero,
+      numero: Number(nuevoPedido.numero),
       peso: Number(nuevoPedido.peso),
-      autorizado: nuevoPedido.autorizado,
-      entregado: nuevoPedido.entregado,
+      autorizado: Boolean(nuevoPedido.autorizado),
+      entregado: Boolean(nuevoPedido.entregado),
+      notes: String(nuevoPedido.notes),
     });
 
     setNuevoPedido({
@@ -40,6 +42,7 @@ export default function Home() {
       peso: "",
       autorizado: false,
       entregado: false,
+      notes: "",
     });
   };
 
@@ -49,10 +52,11 @@ export default function Home() {
 
     updatePedido(id, {
       fecha: pedidoEdit.fecha,
-      numero: pedidoEdit.numero,
+      numero: Number(pedidoEdit.numero),
       peso: Number(pedidoEdit.peso),
       autorizado: pedidoEdit.autorizado,
       entregado: pedidoEdit.entregado,
+      notes: String(pedidoEdit.notes),
     });
 
     setEditandoId(null);
@@ -117,6 +121,19 @@ export default function Home() {
                 value={nuevoPedido.peso}
                 onChange={(e) =>
                   setNuevoPedido({ ...nuevoPedido, peso: e.target.value })
+                }
+                className="border rounded p-2 flex-1"
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="w-28 font-medium">Observaciones</label>
+              <input
+                type="text"
+                placeholder="Observaciones"
+                value={nuevoPedido.notes}
+                onChange={(e) =>
+                  setNuevoPedido({ ...nuevoPedido, notes: e.target.value })
                 }
                 className="border rounded p-2 flex-1"
               />
@@ -219,6 +236,18 @@ export default function Home() {
                         }
                         className="border rounded p-2 w-full"
                       />
+                      <input
+                        type="text"
+                        value={pedidoEdit?.notes || ""}
+                        onChange={(e) =>
+                          setPedidoEdit({
+                            ...pedidoEdit!,
+                            notes: e.target.value,
+                          })
+                        }
+                        className="border rounded p-2 w-full"
+                      />
+
                       <div className="flex gap-6">
                         <label className="flex items-center gap-2">
                           <input
@@ -273,6 +302,9 @@ export default function Home() {
                           {formatDate(pedido.fecha)} | Nº {pedido.numero} |{" "}
                           {pedido.peso} kg
                         </p>
+                        <p className="text-gray-700 bg-amber-200 mr-4">
+                          {pedido.notes}
+                        </p>
                         <p>
                           Autorizado:{" "}
                           <span
@@ -296,7 +328,7 @@ export default function Home() {
                           </span>
                         </p>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 h-fit">
                         <button
                           onClick={() => {
                             setEditandoId(pedido.id);

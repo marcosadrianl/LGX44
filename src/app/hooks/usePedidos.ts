@@ -30,6 +30,10 @@ export function usePedidos() {
   };
 
   const deletePedido = (id: string) => {
+    const confirm = window.confirm("¿Desea eliminar el pedido?");
+
+    if (!confirm) return;
+
     setPedidos((prev) => prev.filter((p) => p.id !== id));
   };
 
