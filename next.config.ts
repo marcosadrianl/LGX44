@@ -1,10 +1,7 @@
+// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
-  distDir: "out",
-  experimental: {
-    appDir: true, // asegúrate que Next usa tu src/app
-  },
+  output: "export", // ← esto reemplaza el uso de `next export`
 };
 
 module.exports = nextConfig;
