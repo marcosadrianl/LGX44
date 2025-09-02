@@ -11,7 +11,7 @@ export default function Home() {
     usePedidos();
 
   const [nuevoPedido, setNuevoPedido] = useState({
-    fecha: "",
+    fecha: new Date().toISOString().split("T")[0],
     numero: "",
     peso: "",
     autorizado: false,
