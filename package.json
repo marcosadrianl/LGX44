@@ -5,18 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && next export",
-    "start": "next start",
-    "electron-dev": "concurrently \"npm:dev\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron-build": "npm run build && electron-builder"
-  },
-  "build": {
-    "appId": "com.controlpesos.pedidos",
-    "win": {
-      "target": "nsis"
-    },
-    "directories": {
-      "output": "dist"
-    }
+    "start": "next start"
   },
   "dependencies": {
     "next": "15.5.2",
