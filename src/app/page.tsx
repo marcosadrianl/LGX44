@@ -5,6 +5,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { formatDate } from "@/app/lib/dateFormat";
 import { sumKilos } from "@/app/lib/sumKilos";
+import { handleKeyDown } from "@/app/lib/accesFunc";
 
 export default function Home() {
   const { pedidos, addPedido, updatePedido, deletePedido, clearPedidos } =
@@ -22,7 +23,8 @@ export default function Home() {
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [pedidoEdit, setPedidoEdit] = useState<typeof nuevoPedido | null>(null);
 
-  const handleAdd = () => {
+  const handleAdd = (e: React.FormEvent) => {
+    e.preventDefault();
     if (!nuevoPedido.numero || !nuevoPedido.peso) return;
 
     addPedido({
@@ -81,7 +83,7 @@ export default function Home() {
 
       <div className="grid grid-cols-2 gap-8 ">
         {/* 📌 Formulario */}
-        <div className="border rounded-lg p-6 shadow-md bg-white h-fit">
+        <form className="border rounded-lg p-6 shadow-md bg-white h-fit">
           <h2 className="text-xl font-semibold mb-4">Nuevo Pedido</h2>
           <div className="space-y-4">
             <div className="flex items-center gap-4">
@@ -93,6 +95,7 @@ export default function Home() {
                     ? nuevoPedido.fecha
                     : new Date().toISOString().split("T")[0]
                 }
+                onKeyDown={handleKeyDown}
                 onChange={(e) =>
                   setNuevoPedido({ ...nuevoPedido, fecha: e.target.value })
                 }
@@ -105,6 +108,7 @@ export default function Home() {
                 type="text"
                 placeholder="Ej: 1023"
                 value={nuevoPedido.numero}
+                onKeyDown={handleKeyDown}
                 onChange={(e) =>
                   setNuevoPedido({ ...nuevoPedido, numero: e.target.value })
                 }
@@ -118,6 +122,7 @@ export default function Home() {
                 type="number"
                 placeholder="kg"
                 value={nuevoPedido.peso}
+                onKeyDown={handleKeyDown}
                 onChange={(e) =>
                   setNuevoPedido({ ...nuevoPedido, peso: e.target.value })
                 }
@@ -131,6 +136,7 @@ export default function Home() {
                 type="text"
                 placeholder="Observaciones"
                 value={nuevoPedido.notes}
+                onKeyDown={handleKeyDown}
                 onChange={(e) =>
                   setNuevoPedido({ ...nuevoPedido, notes: e.target.value })
                 }
@@ -143,6 +149,7 @@ export default function Home() {
                 <input
                   type="checkbox"
                   checked={nuevoPedido.autorizado}
+                  onKeyDown={handleKeyDown}
                   onChange={(e) =>
                     setNuevoPedido({
                       ...nuevoPedido,
@@ -170,16 +177,17 @@ export default function Home() {
 
             <button
               onClick={handleAdd}
+              type="submit"
               className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
             >
               Agregar Pedido
             </button>
           </div>
-        </div>
+        </form>
 
         {/* 📌 Listado con overflow y auto*/}
         <div className="border rounded-lg p-6 shadow-md bg-white">
-          <div className="flex justify-between items-center mb-4 gap-4">
+          <div className="flex justify-between items-center mb-4 gap-2">
             <h2 className="text-xl font-semibold mb-1">Listado de Pedidos</h2>
             <button
               onClick={clearPedidos}
@@ -205,6 +213,7 @@ export default function Home() {
                       <input
                         type="date"
                         value={pedidoEdit?.fecha}
+                        onKeyDown={handleKeyDown}
                         onChange={(e) =>
                           setPedidoEdit({
                             ...pedidoEdit!,
@@ -216,6 +225,7 @@ export default function Home() {
                       <input
                         type="text"
                         value={pedidoEdit?.numero || ""}
+                        onKeyDown={handleKeyDown}
                         onChange={(e) =>
                           setPedidoEdit({
                             ...pedidoEdit!,
@@ -227,6 +237,7 @@ export default function Home() {
                       <input
                         type="number"
                         value={pedidoEdit?.peso || ""}
+                        onKeyDown={handleKeyDown}
                         onChange={(e) =>
                           setPedidoEdit({
                             ...pedidoEdit!,
@@ -238,6 +249,7 @@ export default function Home() {
                       <input
                         type="text"
                         value={pedidoEdit?.notes || ""}
+                        onKeyDown={handleKeyDown}
                         onChange={(e) =>
                           setPedidoEdit({
                             ...pedidoEdit!,
@@ -252,6 +264,7 @@ export default function Home() {
                           <input
                             type="checkbox"
                             checked={pedidoEdit?.autorizado || false}
+                            onKeyDown={handleKeyDown}
                             onChange={(e) =>
                               setPedidoEdit({
                                 ...pedidoEdit!,
@@ -265,6 +278,7 @@ export default function Home() {
                           <input
                             type="checkbox"
                             checked={pedidoEdit?.entregado || false}
+                            onKeyDown={handleKeyDown}
                             onChange={(e) =>
                               setPedidoEdit({
                                 ...pedidoEdit!,
