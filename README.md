@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+```markdown
+# LGX 44
 
-## Getting Started
+Repositorio libre para el control de **pesos y pedidos**.
 
-First, run the development server:
+- 🚀 Basado en **Next.js 14**
+- 💾 Utiliza `localStorage` como base de datos
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Instalación
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Cloná el repositorio:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   git clone https://github.com/marcosadrianl/LGX44.git
+   cd LGX44
+   ```
 
-## Learn More
+2. Instalá las dependencias:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Ejecutá el servidor de desarrollo:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   npm run dev
+   ```
 
-## Deploy on Vercel
+4. Abrí tu navegador en [http://localhost:3000](http://localhost:3000) para ver la app en acción.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📦 Despliegue
+
+Este proyecto puede desplegarse fácilmente en [Vercel](https://vercel.com/new) gracias a su integración nativa con Next.js.  
+Consultá la [documentación oficial de Next.js sobre despliegue](https://nextjs.org/docs/app/building-your-application/deploying) para más detalles.
+
+---
+
+## 🧠 ¿Cómo funciona?
+
+LGX 44 guarda los datos de pedidos y pesos directamente en el navegador usando `localStorage`.  
+Ideal para pruebas rápidas, prototipos o entornos sin backend.
+
+---
+
+¿Querés que le agregue una sección de contribuciones o licencia también?
