@@ -334,7 +334,7 @@ export default function Home() {
                             setEditandoId(pedido.id);
                             setPedidoEdit({
                               ...pedido,
-                              peso: String(pedido.peso),
+                              peso: pedido.peso.toFixed(2),
                             });
                           }}
                           className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
