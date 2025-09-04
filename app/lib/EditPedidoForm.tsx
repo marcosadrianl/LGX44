@@ -1,15 +1,17 @@
 import { handleKeyDown } from "../lib/accesFunc";
 
+interface Pedido {
+  fecha: string;
+  numero: string;
+  peso: string;
+  autorizado: boolean;
+  entregado: boolean;
+  notes: string;
+}
+
 interface EditPedidoFormProps {
-  pedidoEdit: {
-    fecha: string;
-    numero: string;
-    peso: string;
-    autorizado: boolean;
-    entregado: boolean;
-    notes: string;
-  };
-  setPedidoEdit: (pedido: any) => void;
+  pedidoEdit: Pedido;
+  setPedidoEdit: (pedido: Pedido) => void;
   onSave: () => void;
   onCancel: () => void;
 }
