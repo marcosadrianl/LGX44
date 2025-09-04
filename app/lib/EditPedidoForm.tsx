@@ -73,6 +73,34 @@ export const EditPedidoForm = ({
         className="border rounded p-2 w-full"
       />
       <div className="flex gap-4">
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={pedidoEdit?.autorizado || false}
+            onChange={(e) =>
+              setPedidoEdit({
+                ...pedidoEdit!,
+                autorizado: e.target.checked,
+              })
+            }
+          />
+          Autorizado
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={pedidoEdit?.entregado || false}
+            onChange={(e) =>
+              setPedidoEdit({
+                ...pedidoEdit!,
+                entregado: e.target.checked,
+              })
+            }
+          />
+          Entregado
+        </label>
+      </div>
+      <div className="flex gap-4">
         <button
           onClick={onSave}
           className="flex-1 bg-green-600 text-white py-1 rounded hover:bg-green-700"
