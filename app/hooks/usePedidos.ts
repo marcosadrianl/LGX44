@@ -37,14 +37,16 @@ export function usePedidos() {
     setPedidos((prev) => prev.filter((p) => p.id !== id));
   };
 
-  //limpiar todos los pedidos
+  //limpiar todos los pedidos que esten entregados
   const clearPedidos = () => {
     //preguntar si acepta o no eliminarlos
-    const confirm = window.confirm("¿Desea eliminar todos los pedidos?");
+    const confirm = window.confirm(
+      "¿Desea eliminar todos los pedidos entregados?"
+    );
 
     if (!confirm) return;
 
-    setPedidos([]);
+    setPedidos((prev) => prev.filter((p) => !p.entregado));
   };
 
   return { pedidos, addPedido, updatePedido, deletePedido, clearPedidos };
