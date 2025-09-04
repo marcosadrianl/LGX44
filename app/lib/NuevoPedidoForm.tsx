@@ -1,15 +1,17 @@
 import { handleKeyDown } from "./accesFunc";
 
+export interface Pedido {
+  fecha: string;
+  numero: string;
+  peso: string;
+  autorizado: boolean;
+  entregado: boolean;
+  notes: string;
+}
+
 interface NuevoPedidoFormProps {
-  nuevoPedido: {
-    fecha: string;
-    numero: string;
-    peso: string;
-    autorizado: boolean;
-    entregado: boolean;
-    notes: string;
-  };
-  setNuevoPedido: (pedido: any) => void;
+  nuevoPedido: Pedido;
+  setNuevoPedido: (pedido: Pedido) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
 
