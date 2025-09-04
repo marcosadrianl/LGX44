@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Pedido } from "@/app/lib/definitions";
+import { Pedido } from "../lib/definitions";
 
 const STORAGE_KEY = "pedidos";
 
