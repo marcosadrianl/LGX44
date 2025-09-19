@@ -18,7 +18,7 @@ export default function Page() {
   const [nuevoPedido, setNuevoPedido] = useState({
     fecha: new Date().toISOString().split("T")[0],
     numero: "",
-    peso: "",
+    peso: "0",
     autorizado: false,
     entregado: false,
     notes: "",
@@ -70,12 +70,12 @@ export default function Page() {
 
   const totalKilos = sumKilos(pedidos);
 
-  console.log(pedidos);
+  //console.log(pedidos);
 
   return (
     <main className="flex flex-col flex-1">
       <Header />
-      <div className="flex flex-col lg:flex-row content-start gap-8 p-1">
+      <div className="flex flex-col lg:flex-row self-start gap-8 p-1">
         <NuevoPedidoForm
           nuevoPedido={nuevoPedido}
           setNuevoPedido={setNuevoPedido}
