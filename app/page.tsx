@@ -81,7 +81,7 @@ export default function Page() {
           setNuevoPedido={setNuevoPedido}
           onSubmit={handleAdd}
         />
-        <div className="border rounded-lg p-6  w-full lg:w-1/2 shadow-md bg-white h-fit max-h-[450px] overflow-y-auto">
+        <div className="border rounded-lg p-6  w-full lg:w-1/2 shadow-md bg-white">
           <PedidoListHeader onClear={clearPedidos} />
           <TotalKilos totalKilos={totalKilos} />
           <hr />
