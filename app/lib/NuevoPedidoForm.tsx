@@ -21,7 +21,7 @@ export const NuevoPedidoForm = ({
   onSubmit,
 }: NuevoPedidoFormProps) => {
   return (
-    <form className="border rounded-lg p-4 lg:p-6 self-start shadow-md bg-white h-fit w-full lg:w-1/2 m-auto">
+    <form className="flex flex-col border rounded-lg p-4 lg:p-6 self-start shadow-md bg-white h-fit w-full lg:w-1/2 m-auto">
       <h2 className="text-xl font-semibold mb-4">Nuevo Pedido</h2>
       <div className="space-y-4">
         <div className="flex items-center gap-4">
