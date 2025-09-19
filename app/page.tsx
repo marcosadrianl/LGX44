@@ -75,7 +75,7 @@ export default function Page() {
   return (
     <main className="flex flex-col flex-1">
       <Header />
-      <div className="flex flex-col lg:flex-row self-start gap-8 p-1">
+      <div className="flex flex-col lg:flex-row gap-8 p-1">
         <NuevoPedidoForm
           nuevoPedido={nuevoPedido}
           setNuevoPedido={setNuevoPedido}
