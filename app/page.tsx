@@ -17,7 +17,7 @@ export default function Page() {
   const [nuevoPedido, setNuevoPedido] = useState({
     fecha: new Date().toISOString().split("T")[0],
     numero: "",
-    peso: "",
+    peso: "0",
     autorizado: false,
     notes: "",
   });
@@ -67,7 +67,7 @@ export default function Page() {
   const totalKilosAll = sumKilos(pedidos);
   const diffKilosKilos = diffKilos(pedidos);
 
-  console.log(pedidos);
+  //console.log(pedidos);
 
   return (
     <main className="flex flex-col flex-1">
