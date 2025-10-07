@@ -46,7 +46,6 @@ export const NuevoPedidoForm = ({
           <input
             type="number"
             placeholder="Ej: 1023"
-            value={nuevoPedido.numero}
             onKeyDown={handleKeyDown}
             onChange={(e) =>
               setNuevoPedido({ ...nuevoPedido, numero: e.target.value })
@@ -60,7 +59,6 @@ export const NuevoPedidoForm = ({
           <input
             type="number"
             placeholder="kg"
-            value={nuevoPedido.peso}
             onKeyDown={handleKeyDown}
             onChange={(e) =>
               setNuevoPedido({ ...nuevoPedido, peso: e.target.value })
@@ -74,7 +72,6 @@ export const NuevoPedidoForm = ({
           <textarea
             placeholder="Observaciones"
             maxLength={200}
-            value={nuevoPedido.notes}
             onChange={(e) => {
               setNuevoPedido({ ...nuevoPedido, notes: e.target.value });
             }}
