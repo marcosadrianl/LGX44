@@ -5,5 +5,4 @@ export interface Pedido {
   peso: number; // en kg, por ejemplo
   notes: string;
   autorizado: boolean;
-  entregado: boolean;
 }

@@ -5,7 +5,7 @@ interface Pedido {
   numero: string;
   peso: string;
   autorizado: boolean;
-  entregado: boolean;
+
   notes: string;
 }
 
@@ -73,7 +73,7 @@ export const EditPedidoForm = ({
         className="border rounded p-2 w-full"
       />
       <div className="flex gap-4">
-        <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2 cursor-pointer select-none">
           <input
             type="checkbox"
             checked={pedidoEdit?.autorizado || false}
@@ -83,33 +83,21 @@ export const EditPedidoForm = ({
                 autorizado: e.target.checked,
               })
             }
+            className="h-4 w-4"
           />
           Autorizado
-        </label>
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={pedidoEdit?.entregado || false}
-            onChange={(e) =>
-              setPedidoEdit({
-                ...pedidoEdit!,
-                entregado: e.target.checked,
-              })
-            }
-          />
-          Entregado
         </label>
       </div>
       <div className="flex gap-4">
         <button
           onClick={onSave}
-          className="flex-1 bg-green-600 text-white py-1 rounded hover:bg-green-700"
+          className="flex-1 bg-green-600 text-white py-1 rounded hover:bg-green-700 cursor-pointer"
         >
           Guardar
         </button>
         <button
           onClick={onCancel}
-          className="flex-1 bg-gray-400 text-white py-1 rounded hover:bg-gray-500"
+          className="flex-1 bg-gray-400 text-white py-1 rounded hover:bg-gray-500 cursor-pointer"
         >
           Cancelar
         </button>
