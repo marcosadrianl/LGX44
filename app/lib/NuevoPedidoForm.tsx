@@ -5,7 +5,6 @@ export interface Pedido {
   numero: string;
   peso: string;
   autorizado: boolean;
-
   notes: string;
 }
 
@@ -28,11 +27,7 @@ export const NuevoPedidoForm = ({
           <label className="w-28 font-medium">Fecha</label>
           <input
             type="date"
-            value={
-              nuevoPedido.fecha
-                ? nuevoPedido.fecha
-                : new Date().toISOString().split("T")[0]
-            }
+            value={nuevoPedido.fecha} // Agregado value
             onKeyDown={handleKeyDown}
             onChange={(e) =>
               setNuevoPedido({ ...nuevoPedido, fecha: e.target.value })
@@ -46,6 +41,7 @@ export const NuevoPedidoForm = ({
           <input
             type="number"
             placeholder="Ej: 1023"
+            value={nuevoPedido.numero} // Agregado value
             onKeyDown={handleKeyDown}
             onChange={(e) =>
               setNuevoPedido({ ...nuevoPedido, numero: e.target.value })
@@ -59,6 +55,7 @@ export const NuevoPedidoForm = ({
           <input
             type="number"
             placeholder="kg"
+            value={nuevoPedido.peso} // Agregado value
             onKeyDown={handleKeyDown}
             onChange={(e) =>
               setNuevoPedido({ ...nuevoPedido, peso: e.target.value })
@@ -71,24 +68,13 @@ export const NuevoPedidoForm = ({
           <label className="w-28 font-medium">Observaciones</label>
           <textarea
             placeholder="Observaciones"
+            value={nuevoPedido.notes} // Agregado value
             maxLength={200}
             onChange={(e) => {
               setNuevoPedido({ ...nuevoPedido, notes: e.target.value });
             }}
             className="border rounded p-2 flex-1"
           />
-        </div>
-
-        <div className="flex gap-6 mt-4 ">
-          <label className="items-center gap-2 hidden">
-            <input type="checkbox" />
-            Autorizado
-          </label>
-
-          <label className="items-center gap-2 hidden">
-            <input type="checkbox" />
-            Entregado
-          </label>
         </div>
 
         <button

@@ -17,7 +17,7 @@ export default function Page() {
   const [nuevoPedido, setNuevoPedido] = useState({
     fecha: new Date().toISOString().split("T")[0],
     numero: "",
-    peso: "0",
+    peso: "",
     autorizado: false,
     notes: "",
   });
@@ -26,9 +26,12 @@ export default function Page() {
   const [pedidoEdit, setPedidoEdit] = useState<typeof nuevoPedido | null>(null);
 
   const handleAdd = (e: React.FormEvent) => {
+    //limpiar el formulario
     e.preventDefault();
+
     if (!nuevoPedido.numero || !nuevoPedido.peso) return;
 
+    //luego de agregar el pedido, limpiar el formulario
     addPedido({
       id: uuidv4(),
       fecha: nuevoPedido.fecha,
@@ -38,8 +41,9 @@ export default function Page() {
       notes: String(nuevoPedido.notes),
     });
 
+    //setNuevo pedido debe borrar todo y dejar la fecha de hoy
     setNuevoPedido({
-      fecha: "",
+      fecha: new Date().toISOString().split("T")[0],
       numero: "",
       peso: "",
       autorizado: false,
@@ -90,7 +94,7 @@ export default function Page() {
               <p className="text-gray-500">No hay pedidos registrados.</p>
             ) : (
               <ul className="space-y-3 mt-1">
-                {pedidos.reverse().map((pedido) => (
+                {pedidos.map((pedido) => (
                   <li
                     key={pedido.id}
                     className="border rounded p-4 hover:bg-gray-200 "

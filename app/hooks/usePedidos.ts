@@ -19,8 +19,14 @@ export function usePedidos() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(pedidos));
   }, [pedidos]);
 
-  const addPedido = (pedido: Pedido) => {
-    setPedidos((prev) => [...prev, pedido]);
+  const addPedido = (newPedido: Pedido) => {
+    const existingPedidos = pedidos.some((p) => p.numero === newPedido.numero);
+
+    if (!existingPedidos) {
+      setPedidos((prevPedidos) => [newPedido, ...prevPedidos]);
+    } else {
+      alert("El número de pedido ya existe.");
+    }
   };
 
   const updatePedido = (id: string, updated: Partial<Pedido>) => {
