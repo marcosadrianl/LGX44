@@ -102,7 +102,7 @@ export const PedidoItem = ({
             >
               <button
                 onClick={handleEdit}
-                className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100"
+                className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 z-10"
                 role="menuitem"
               >
                 Editar

@@ -22,12 +22,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const STORAGE_KEY = "lgx_auth";
+const FAILED_ATTEMPTS_KEY = "lgx_auth_failed_attempts";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [sucursal, setSucursal] = useState<Sucursal | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [failedAttempts, setFailedAttempts] = useState(0);
 
   // Cargar sesión desde localStorage al iniciar
   useEffect(() => {
@@ -42,7 +44,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem(STORAGE_KEY);
       }
     }
+
+    const storedAttempts = localStorage.getItem(FAILED_ATTEMPTS_KEY);
+    if (storedAttempts) {
+      const parsed = Number(storedAttempts);
+      if (Number.isFinite(parsed)) {
+        setFailedAttempts(parsed);
+      } else {
+        localStorage.removeItem(FAILED_ATTEMPTS_KEY);
+      }
+    }
   }, []);
+
+  const getDelayMs = (attempt: number) => {
+    if (attempt <= 2) return 10000;
+    if (attempt === 3) return 40000;
+    return 300000;
+  };
+
+  const saveFailedAttempts = (count: number) => {
+    setFailedAttempts(count);
+    localStorage.setItem(FAILED_ATTEMPTS_KEY, String(count));
+  };
+
+  const resetFailedAttempts = () => {
+    setFailedAttempts(0);
+    localStorage.removeItem(FAILED_ATTEMPTS_KEY);
+  };
 
   const login = async (code: string): Promise<boolean> => {
     setIsLoading(true);
@@ -51,6 +79,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const passkey = Number(code);
       if (!Number.isFinite(passkey)) {
+        const nextAttempt = failedAttempts + 1;
+        saveFailedAttempts(nextAttempt);
+        await new Promise((resolve) =>
+          setTimeout(resolve, getDelayMs(nextAttempt)),
+        );
         setError("Código inválido. Verifique e intente nuevamente.");
         setIsLoading(false);
         return false;
@@ -63,6 +96,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .single();
 
       if (fetchError || !data) {
+        const nextAttempt = failedAttempts + 1;
+        saveFailedAttempts(nextAttempt);
+        await new Promise((resolve) =>
+          setTimeout(resolve, getDelayMs(nextAttempt)),
+        );
         setError("Código inválido. Verifique e intente nuevamente.");
         setIsLoading(false);
         return false;
@@ -72,6 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSucursal(foundSucursal);
       setIsAuthenticated(true);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(foundSucursal));
+      resetFailedAttempts();
       setIsLoading(false);
       return true;
     } catch (e) {

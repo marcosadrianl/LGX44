@@ -118,7 +118,14 @@ export default function Page() {
                 {pedidos.map((pedido) => (
                   <li
                     key={pedido.id}
-                    className="border rounded p-4 hover:bg-gray-50 text-sm"
+                    className={`border rounded p-4 hover:bg-gray-50 text-sm transition-[max-height] duration-300 ease-in-out ${
+                      editandoId === pedido.id
+                        ? "overflow-hidden"
+                        : "overflow-visible"
+                    }`}
+                    style={{
+                      maxHeight: editandoId === pedido.id ? "520px" : "180px",
+                    }}
                   >
                     {editandoId === pedido.id ? (
                       <EditPedidoForm
