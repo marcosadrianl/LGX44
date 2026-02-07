@@ -1,9 +1,26 @@
-export default function Header({ suc = "LGX 44" }: { suc?: string }) {
+import { Sucursal } from "../models/Pedido.Schema";
+
+interface HeaderProps {
+  sucursal: Sucursal | null;
+  onLogout?: () => void;
+}
+
+export default function Header({ sucursal, onLogout }: HeaderProps) {
   return (
-    <header className="bg-blue-600 text-white w-full">
-      <h1 className="text-2xl font-bold p-4 text-center lg:text-left ">
-        CONTROL DE PESOS Y PEDIDOS - {suc}
-      </h1>
+    <header className="bg-gray-300 text-gray-700 w-full">
+      <div className="flex items-center justify-between px-4 py-1">
+        <h1 className="text-2xl font-bold text-center lg:text-left">
+          CONTROL DE PESOS Y PEDIDOS - {sucursal?.name || "LGX"}
+        </h1>
+        {onLogout && (
+          <button
+            onClick={onLogout}
+            className="bg-slate-200 hover:bg-slate-50 cursor-pointer px-4 py-1 text-sm font-semibold transition"
+          >
+            Salir
+          </button>
+        )}
+      </div>
     </header>
   );
 }

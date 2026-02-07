@@ -7,13 +7,13 @@ export const TotalKilos = ({
 }) => {
   function getLabel() {
     if (type === "auth") return "Total Autorizado";
-    if (type === "diff") return "Kilos restantes";
+    if (type === "diff") return "Kilos Restantes";
     return "Total Kilos";
   }
 
   return (
-    <h3 className="text-gray-500 mb-4">
-      {getLabel()}: {totalKilos}kg
+    <h3 className="text-gray-700 mb-4">
+      {getLabel()}: {totalKilos} kg
     </h3>
   );
 };

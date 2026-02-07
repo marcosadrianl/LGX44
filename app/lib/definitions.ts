@@ -5,4 +5,5 @@ export interface Pedido {
   peso: number; // en kg, por ejemplo
   notes: string;
   autorizado: boolean;
+  sucursalId: string; // ID de la sucursal
 }

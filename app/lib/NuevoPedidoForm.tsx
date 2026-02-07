@@ -20,11 +20,11 @@ export const NuevoPedidoForm = ({
   onSubmit,
 }: NuevoPedidoFormProps) => {
   return (
-    <form className="p-4 lg:p-6 h-fit w-full lg:w-1/2 mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Nuevo Pedido</h2>
+    <form className="p-4 lg:p-6 h-fit w-full mx-auto text-sm">
+      <h2 className="text-xl font-semibold mb-4">Ingresar Pedido</h2>
       <div className="space-y-4">
         <div className="flex items-center gap-4">
-          <label className="w-28 font-medium">Fecha</label>
+          <label className="w-28">Fecha</label>
           <input
             type="date"
             value={nuevoPedido.fecha} // Agregado value
@@ -37,7 +37,7 @@ export const NuevoPedidoForm = ({
         </div>
 
         <div className="flex items-center gap-4">
-          <label className="w-28 font-medium">N° Pedido</label>
+          <label className="w-28">N° Pedido</label>
           <input
             type="number"
             placeholder="Ej: 1023"
@@ -51,7 +51,7 @@ export const NuevoPedidoForm = ({
         </div>
 
         <div className="flex items-center gap-4">
-          <label className="w-28 font-medium">Peso</label>
+          <label className="w-28">Peso</label>
           <input
             type="number"
             placeholder="kg"
@@ -65,7 +65,7 @@ export const NuevoPedidoForm = ({
         </div>
 
         <div className="flex items-center gap-4">
-          <label className="w-28 font-medium">Observaciones</label>
+          <label className="w-28">Observaciones</label>
           <textarea
             placeholder="Observaciones"
             value={nuevoPedido.notes} // Agregado value
@@ -80,7 +80,7 @@ export const NuevoPedidoForm = ({
         <button
           onClick={onSubmit}
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="w-full bg-slate-600 text-white py-2 rounded hover:bg-slate-700 cursor-pointer transition"
         >
           Agregar Pedido
         </button>

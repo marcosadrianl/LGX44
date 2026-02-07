@@ -10,9 +10,15 @@ import { PedidoListHeader } from "./lib/PedidosListHeader";
 import { NuevoPedidoForm } from "./lib/NuevoPedidoForm";
 import { EditPedidoForm } from "./lib/EditPedidoForm";
 import { PedidoItem } from "./lib/PedidoItem";
+import { LoginModal } from "./lib/LoginModal";
+import { useAuth } from "./context/AuthContext";
 
 export default function Page() {
-  const { pedidos, addPedido, updatePedido, deletePedido } = usePedidos();
+  const { sucursal, isAuthenticated, login, logout, isLoading, error } =
+    useAuth();
+  const { pedidos, addPedido, updatePedido, deletePedido } = usePedidos(
+    sucursal?.id || null,
+  );
 
   const [nuevoPedido, setNuevoPedido] = useState({
     fecha: new Date().toISOString().split("T")[0],
@@ -26,12 +32,10 @@ export default function Page() {
   const [pedidoEdit, setPedidoEdit] = useState<typeof nuevoPedido | null>(null);
 
   const handleAdd = (e: React.FormEvent) => {
-    //limpiar el formulario
     e.preventDefault();
 
-    if (!nuevoPedido.numero || !nuevoPedido.peso) return;
+    if (!nuevoPedido.numero || !nuevoPedido.peso || !sucursal) return;
 
-    //luego de agregar el pedido, limpiar el formulario
     addPedido({
       id: uuidv4(),
       fecha: nuevoPedido.fecha,
@@ -39,9 +43,9 @@ export default function Page() {
       peso: Number(nuevoPedido.peso),
       autorizado: nuevoPedido.autorizado,
       notes: String(nuevoPedido.notes),
+      sucursalId: sucursal.id,
     });
 
-    //setNuevo pedido debe borrar todo y dejar la fecha de hoy
     setNuevoPedido({
       fecha: new Date().toISOString().split("T")[0],
       numero: "",
@@ -53,7 +57,6 @@ export default function Page() {
 
   const handleSaveEdit = (id: string) => {
     if (!pedidoEdit) return;
-    console.log(pedidoEdit.fecha);
 
     updatePedido(id, {
       fecha: pedidoEdit.fecha,
@@ -71,25 +74,43 @@ export default function Page() {
   const totalKilosAll = sumKilos(pedidos);
   const diffKilosKilos = diffKilos(pedidos);
 
-  //console.log(pedidos);
+  const handleLogin = async (code: string) => {
+    const success = await login(code);
+    return success;
+  };
+
+  // Mostrar modal de login si no está autenticado
+  if (!isAuthenticated) {
+    return (
+      <LoginModal
+        onLogin={handleLogin}
+        isLoading={isLoading}
+        error={error || undefined}
+      />
+    );
+  }
 
   return (
     <main className="flex flex-col flex-1">
-      <Header />
+      <Header sucursal={sucursal} onLogout={logout} />
       <div className="flex flex-col lg:flex-row gap-8 p-1">
-        <NuevoPedidoForm
-          nuevoPedido={nuevoPedido}
-          setNuevoPedido={setNuevoPedido}
-          onSubmit={handleAdd}
-        />
-        <div className="p-6  w-full lg:w-1/2 bg-white">
-          <PedidoListHeader onClear={() => deletePedido("all")} />
-          <TotalKilos totalKilos={totalKilosAll} type="all" />
-          <TotalKilos totalKilos={totalKilosAuth} type="auth" />
-          <TotalKilos totalKilos={diffKilosKilos} type="diff" />
+        <div className="flex flex-col w-1/2">
+          <div className="px-4">
+            <TotalKilos totalKilos={totalKilosAll} type="all" />
+            <TotalKilos totalKilos={totalKilosAuth} type="auth" />
+            <TotalKilos totalKilos={diffKilosKilos} type="diff" />
 
-          <hr />
-          <div className="mt-4 overflow-y-auto">
+            <hr />
+          </div>
+          <NuevoPedidoForm
+            nuevoPedido={nuevoPedido}
+            setNuevoPedido={setNuevoPedido}
+            onSubmit={handleAdd}
+          />
+        </div>
+        <div className="w-full lg:w-1/2 bg-white flex flex-col max-h-screen">
+          <PedidoListHeader onClear={() => deletePedido("all")} />
+          <div className="overflow-y-auto flex-1 p-1">
             {pedidos.length === 0 ? (
               <p className="text-gray-500">No hay pedidos registrados.</p>
             ) : (
@@ -97,7 +118,7 @@ export default function Page() {
                 {pedidos.map((pedido) => (
                   <li
                     key={pedido.id}
-                    className="border rounded p-4 hover:bg-gray-200 "
+                    className="border rounded p-4 hover:bg-gray-50 text-sm"
                   >
                     {editandoId === pedido.id ? (
                       <EditPedidoForm
@@ -113,6 +134,9 @@ export default function Page() {
                       // 📌 Vista normal
                       <PedidoItem
                         pedido={pedido}
+                        onAuthorize={() =>
+                          updatePedido(pedido.id, { autorizado: true })
+                        }
                         onEdit={() => {
                           setEditandoId(pedido.id);
                           setPedidoEdit({
