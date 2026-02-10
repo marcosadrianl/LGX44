@@ -117,7 +117,7 @@ export function usePedidos(sucursalId: string | null) {
   const deletePedido = async (id: string) => {
     if (id === "all") {
       const confirmAll = window.confirm(
-        "¿Desea eliminar todos los pedidos de esta sucursal?",
+        "¿Desea eliminar todos los pedidos de esta sucursal? \nEsta acción no se puede deshacer.",
       );
       if (!confirmAll) return;
       if (!sucursalId) return;
@@ -158,5 +158,39 @@ export function usePedidos(sucursalId: string | null) {
     }
   };
 
-  return { pedidos, addPedido, updatePedido, deletePedido, isLoading, error };
+  const deleteAuthorizedPedidos = async () => {
+    const confirm = window.confirm(
+      "¿Desea eliminar todos los pedidos autorizados? \nEsta acción no se puede deshacer.",
+    );
+    if (!confirm) return;
+    if (!sucursalId) return;
+
+    try {
+      const { error } = await supabase
+        .from("pedidos")
+        .delete()
+        .eq("sucursalId", sucursalId)
+        .eq("autorizado", true);
+
+      if (error) throw error;
+
+      setPedidos((prev) => prev.filter((p) => !p.autorizado));
+    } catch (err) {
+      console.error("Error al eliminar pedidos autorizados:", err);
+      alert(
+        "Error al eliminar pedidos autorizados: " +
+          (err instanceof Error ? err.message : ""),
+      );
+    }
+  };
+
+  return {
+    pedidos,
+    addPedido,
+    updatePedido,
+    deletePedido,
+    deleteAuthorizedPedidos,
+    isLoading,
+    error,
+  };
 }

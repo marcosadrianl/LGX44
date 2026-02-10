@@ -20,7 +20,7 @@ export const NuevoPedidoForm = ({
   onSubmit,
 }: NuevoPedidoFormProps) => {
   return (
-    <form className="p-4 lg:p-6 h-fit w-full mx-auto text-sm">
+    <form className="px-4 h-fit w-full mx-auto text-sm">
       <h2 className="text-xl font-semibold mb-4">Ingresar Pedido</h2>
       <div className="space-y-4">
         <div className="flex items-center gap-4">
@@ -67,7 +67,7 @@ export const NuevoPedidoForm = ({
         <div className="flex items-center gap-4">
           <label className="w-28">Observaciones</label>
           <textarea
-            placeholder="Observaciones"
+            placeholder="Observaciones (Opcional)"
             value={nuevoPedido.notes} // Agregado value
             maxLength={200}
             onChange={(e) => {
@@ -80,7 +80,14 @@ export const NuevoPedidoForm = ({
         <button
           onClick={onSubmit}
           type="submit"
-          className="w-full bg-slate-600 text-white py-2 rounded hover:bg-slate-700 cursor-pointer transition"
+          disabled={
+            !nuevoPedido.fecha || !nuevoPedido.numero || !nuevoPedido.peso
+          }
+          className={`w-full py-2 rounded transition ${
+            !nuevoPedido.fecha || !nuevoPedido.numero || !nuevoPedido.peso
+              ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+              : "bg-slate-600 text-white hover:bg-slate-700 cursor-pointer"
+          }`}
         >
           Agregar Pedido
         </button>

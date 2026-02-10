@@ -16,9 +16,13 @@ import { useAuth } from "./context/AuthContext";
 export default function Page() {
   const { sucursal, isAuthenticated, login, logout, isLoading, error } =
     useAuth();
-  const { pedidos, addPedido, updatePedido, deletePedido } = usePedidos(
-    sucursal?.id || null,
-  );
+  const {
+    pedidos,
+    addPedido,
+    updatePedido,
+    deletePedido,
+    deleteAuthorizedPedidos,
+  } = usePedidos(sucursal?.id || null);
 
   const [nuevoPedido, setNuevoPedido] = useState({
     fecha: new Date().toISOString().split("T")[0],
@@ -95,12 +99,11 @@ export default function Page() {
       <Header sucursal={sucursal} onLogout={logout} />
       <div className="flex flex-col lg:flex-row gap-8 p-1">
         <div className="flex flex-col w-1/2">
-          <div className="px-4">
+          <div className="px-4 border-b border-gray-300">
+            <h2 className="text-xl font-semibold mb-1">Resumen</h2>
             <TotalKilos totalKilos={totalKilosAll} type="all" />
             <TotalKilos totalKilos={totalKilosAuth} type="auth" />
             <TotalKilos totalKilos={diffKilosKilos} type="diff" />
-
-            <hr />
           </div>
           <NuevoPedidoForm
             nuevoPedido={nuevoPedido}
@@ -108,8 +111,11 @@ export default function Page() {
             onSubmit={handleAdd}
           />
         </div>
-        <div className="w-full lg:w-1/2 bg-white flex flex-col max-h-screen">
-          <PedidoListHeader onClear={() => deletePedido("all")} />
+        <div className="w-full lg:w-1/2 bg-white flex flex-col max-h-[500px]">
+          <PedidoListHeader
+            onClear={() => deletePedido("all")}
+            onClearAuthorized={deleteAuthorizedPedidos}
+          />
           <div className="overflow-y-auto flex-1 p-1">
             {pedidos.length === 0 ? (
               <p className="text-gray-500">No hay pedidos registrados.</p>
@@ -118,7 +124,7 @@ export default function Page() {
                 {pedidos.map((pedido) => (
                   <li
                     key={pedido.id}
-                    className={`border rounded p-4 hover:bg-gray-50 text-sm transition-[max-height] duration-300 ease-in-out ${
+                    className={`border border-gray-300 rounded p-4 hover:bg-gray-50 text-sm transition-[max-height] duration-300 ease-in-out ${
                       editandoId === pedido.id
                         ? "overflow-hidden"
                         : "overflow-visible"

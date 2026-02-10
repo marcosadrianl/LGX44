@@ -65,9 +65,9 @@ export function LoginModal({ onLogin, isLoading, error }: LoginModalProps) {
           </button>
         </form>
 
-        <p className="text-xs text-gray-500 mt-6 text-center">
+        {/* <p className="text-xs text-gray-500 mt-6 text-center">
           Solicite su código al administrador del sistema
-        </p>
+        </p> */}
       </div>
     </div>
   );

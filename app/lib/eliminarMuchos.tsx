@@ -10,16 +10,14 @@ interface PedidoItemProps {
     autorizado: boolean;
     notes: string;
   };
-  onEdit: () => void;
+
   onDelete: () => void;
-  onAuthorize: () => void;
 }
 
 export const PedidoItem = ({
   pedido,
-  onEdit,
+
   onDelete,
-  onAuthorize,
 }: PedidoItemProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -41,11 +39,6 @@ export const PedidoItem = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMenuOpen]);
 
-  const handleEdit = () => {
-    setIsMenuOpen(false);
-    onEdit();
-  };
-
   const handleDelete = () => {
     setIsMenuOpen(false);
     onDelete();
@@ -53,38 +46,7 @@ export const PedidoItem = ({
 
   return (
     <div className="flex justify-between items-start gap-4">
-      <div>
-        <p className="font-semibold">
-          Nº {pedido.numero} | {pedido.peso} kg
-        </p>
-        <p className="text-gray-700  mr-4 whitespace-pre-line">
-          {pedido.notes == "" ? "" : pedido.notes}
-        </p>
-        <p>
-          Autorizado:{" "}
-          <span
-            className={pedido.autorizado ? "text-green-600" : "text-red-600"}
-          >
-            {pedido.autorizado ? "Sí" : "No"}
-          </span>
-        </p>
-        <p className="text-sm text-gray-500">
-          Fecha: {formatDate(pedido.fecha)}
-        </p>
-      </div>
       <div className="flex items-center gap-2 h-fit">
-        <button
-          onClick={onAuthorize}
-          disabled={pedido.autorizado}
-          className={`px-3 py-1 rounded font-semibold text-white transition ${
-            pedido.autorizado
-              ? "bg-green-400 cursor-not-allowed"
-              : "bg-yellow-600 hover:bg-green-700 cursor-pointer"
-          }`}
-        >
-          {pedido.autorizado ? "Autorizado" : "Autorizar"}
-        </button>
-
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setIsMenuOpen((prev) => !prev)}
@@ -100,13 +62,6 @@ export const PedidoItem = ({
               role="menu"
               className="absolute right-0 mt-2 w-36 bg-white border border-gray-200 rounded shadow-lg z-10"
             >
-              <button
-                onClick={handleEdit}
-                className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 z-10"
-                role="menuitem"
-              >
-                Editar
-              </button>
               <button
                 onClick={handleDelete}
                 className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50"

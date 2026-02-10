@@ -62,7 +62,7 @@ export const EditPedidoForm = ({
         />
         <textarea
           value={pedidoEdit?.notes || ""}
-          placeholder="Observaciones"
+          placeholder="Observaciones (Opcional)"
           maxLength={200}
           onChange={(e) =>
             setPedidoEdit({
