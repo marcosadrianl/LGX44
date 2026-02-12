@@ -29,7 +29,7 @@ export function LoginModal({ onLogin, isLoading, error }: LoginModalProps) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl">
         <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">
-          Iniciar Sesión
+          Ingresar
         </h2>
         <p className="text-gray-600 mb-6 text-center">
           Ingrese el código de 6 dígitos de su sucursal
